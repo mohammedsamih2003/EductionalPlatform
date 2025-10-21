@@ -1,13 +1,13 @@
 # 🧑‍🏫 Educational Platform - Backend (Spring Boot)
 
-## 📘 Overview
+##  Overview
 This project is a **backend system** for an educational platform built using **Spring Boot**.  
 It allows **teachers** to create and manage their own courses and lessons, and **students** to enroll in courses and access lessons only after enrollment.  
 The system includes **role-based access control** to ensure that each user can only perform actions they are authorized to.
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 - **Java 21+**
 - **Spring Boot 3.5.6x**
 - **Spring Data JPA / Hibernate**  
@@ -17,22 +17,22 @@ The system includes **role-based access control** to ensure that each user can o
 
 ---
 
-## 🚀 Features
-### 🧑‍🏫 Teachers
+##  Features
+###  Teachers
 - Create, edit, and delete their own courses  
 - Add lessons to their courses  
 
-### 🎓 Students
+###  Students
 - Enroll in available courses  
 - Access lessons only after enrollment  
 
-### 🔐 Security
+###  Security
 - Role-based access (Teacher / Student)  
 - JWT authentication and authorization  
 
-### 📦 General
+###  General
 - RESTful APIs for all operations  
 
 ---
 
-## 🏗️ Project Structure
+##  Project Structure
