@@ -5,6 +5,8 @@ import com.educationalplatform.entity.User;
 import com.educationalplatform.enums.Role;
 import com.educationalplatform.repositories.UserRepository;
 import com.educationalplatform.service.interfaces.UserService;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,29 +17,22 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
 
     @Override
     public UserDto addUser(UserDto userDto) {
-        User user = new User(
-                userDto.getUsername(),
-                userDto.getEmail(),
-                "moooo14452",
-                userDto.getRole()
-        );
+
+        User user = modelMapper.map(userDto, User.class);
+        user.setPassword("moooo14452");
+
         User savedUser = userRepository.save(user);
-
-        UserDto response = new UserDto(
-                savedUser.getId(),
-                savedUser.getUserName(),
-                savedUser.getEmail(),
-                savedUser.getRole()
-        );
-
+        UserDto response = modelMapper.map(savedUser, UserDto.class);
         return response;
     }
 
@@ -46,13 +41,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserDto response = new UserDto(
-                user.getId(),
-                user.getUserName(),
-                user.getEmail(),
-                user.getRole()
-        );
-
+        UserDto response = modelMapper.map(user, UserDto.class);
         return response;
     }
 
@@ -63,12 +52,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtos = new ArrayList<>();
 
         for (User user : users){
-            UserDto userDto = new UserDto(
-              user.getId(),
-              user.getUserName(),
-              user.getEmail(),
-              user.getRole()
-            );
+            UserDto userDto = modelMapper.map(user, UserDto.class);
             userDtos.add(userDto);
         }
         return userDtos;
@@ -79,17 +63,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
-        user.setUserName(userDto.getUsername());
-        user.setEmail(userDto.getEmail());;
-        user.setRole(userDto.getRole());
+        modelMapper.map(userDto, user);
 
         User updateUser = userRepository.save(user);
-        UserDto response = new UserDto(
-                updateUser.getId(),
-                updateUser.getUserName(),
-                updateUser.getEmail(),
-                updateUser.getRole()
-        );
+        UserDto response = modelMapper.map(updateUser, UserDto.class);
+
         return response;
     }
 
@@ -109,12 +87,7 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtos = new ArrayList<>();
 
         for (User user : users){
-            UserDto userDto = new UserDto(
-                    user.getId(),
-                    user.getUserName(),
-                    user.getEmail(),
-                    user.getRole()
-            );
+            UserDto userDto =modelMapper.map(user, UserDto.class);
             userDtos.add(userDto);
         }
         return userDtos;
@@ -125,12 +98,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserDto response = new UserDto(
-                user.getId(),
-                user.getUserName(),
-                user.getEmail(),
-                user.getRole()
-        );
+        UserDto response =  modelMapper.map(user, UserDto.class);
 
         return response;
     }
