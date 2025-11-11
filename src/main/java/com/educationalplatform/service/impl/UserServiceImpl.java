@@ -7,6 +7,7 @@ import com.educationalplatform.repositories.UserRepository;
 import com.educationalplatform.service.interfaces.UserService;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -29,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public UserDto addUser(UserDto userDto) {
 
         User user = modelMapper.map(userDto, User.class);
-        user.setPassword("moooo14452");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user);
         UserDto response = modelMapper.map(savedUser, UserDto.class);
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
         modelMapper.map(userDto, user);
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User updateUser = userRepository.save(user);
         UserDto response = modelMapper.map(updateUser, UserDto.class);
 
