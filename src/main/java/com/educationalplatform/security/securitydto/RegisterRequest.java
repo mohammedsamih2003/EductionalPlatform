@@ -1,4 +1,4 @@
-package com.educationalplatform.dto;
+package com.educationalplatform.security.securitydto;
 
 import lombok.Data;
 
