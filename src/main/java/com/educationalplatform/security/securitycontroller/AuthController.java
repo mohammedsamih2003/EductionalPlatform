@@ -1,4 +1,4 @@
-package com.educationalplatform.controller;
+package com.educationalplatform.security.securitycontroller;
 
 import com.educationalplatform.entity.User;
 import com.educationalplatform.enums.Role;
@@ -39,12 +39,12 @@ public class AuthController {
         user.setUserName(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.STUDENT);
+        user.setRole(request.getRole());
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, "User registered successfully", user.getRole().name());
+        String token = jwtUtil.generateToken(user.getEmail(),user.getRole());
+        return new AuthResponse(token, "User registered successfully", user.getRole());
     }
 
     @PostMapping("/login")
@@ -59,7 +59,7 @@ public class AuthController {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token, "Login successful", user.getRole().name());
+        String token = jwtUtil.generateToken(user.getEmail(),user.getRole());
+        return new AuthResponse(token, "Login successful", user.getRole());
     }
 }
